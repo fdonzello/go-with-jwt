@@ -58,7 +58,12 @@ func UsersLogin(c buffalo.Context) error {
 
 	u, err := getUser(email)
 
-	if err != nil || bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(pwd)) != nil {
+	if err != nil {
+		return c.Error(http.StatusBadRequest, errors.New("Login failed"))
+	}
+
+	pwdCompare := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(pwd))
+	if pwdCompare != nil {
 		return c.Error(http.StatusBadRequest, errors.New("Login failed"))
 	}
 
