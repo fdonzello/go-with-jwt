@@ -36,12 +36,6 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
-// CustomClaims represents custom claims for jwt tokens
-type CustomClaims struct {
-	User User `json:"user"`
-	jwt.StandardClaims
-}
-
 // UsersLogin perform a login with the given credentials.
 func UsersLogin(c buffalo.Context) error {
 
@@ -68,13 +62,10 @@ func UsersLogin(c buffalo.Context) error {
 		return c.Error(http.StatusBadRequest, errors.New("Login failed"))
 	}
 
-	claims := CustomClaims{
-		u,
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(oneWeek()).Unix(),
-			Issuer:    fmt.Sprintf("%s.api.go-with-jwt.it", envy.Get("GO_ENV", "development")),
-			Id:        u.ID,
-		},
+	claims := jwt.StandardClaims{
+		ExpiresAt: time.Now().Add(oneWeek()).Unix(),
+		Issuer:    fmt.Sprintf("%s.api.go-with-jwt.it", envy.Get("GO_ENV", "development")),
+		Id:        u.ID,
 	}
 
 	signingKey, err := ioutil.ReadFile(envy.Get("JWT_KEY_PATH", ""))
