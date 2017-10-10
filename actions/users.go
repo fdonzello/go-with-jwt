@@ -133,8 +133,8 @@ func encryptPassword(p string) string {
 	return string(pwd)
 }
 
-// RestrictedHandlerMiddleware search and parse the jwt token in order to authenticate
-// the request and populate the Context with the user containend in the claims.
+// RestrictedHandlerMiddleware searches and parses the jwt token in order to authenticate
+// the request and populate the Context with the user contained in the claims.
 func RestrictedHandlerMiddleware(next buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
 		tokenString := c.Request().Header.Get("Authorization")
