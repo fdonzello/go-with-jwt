@@ -71,7 +71,7 @@ func UsersLogin(c buffalo.Context) error {
 	claims := CustomClaims{
 		u,
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(7 * 24 * time.Hour).Unix(), // token lifetime: 1 week
+			ExpiresAt: time.Now().Add(oneWeek()).Unix(),
 			Issuer:    fmt.Sprintf("%s.api.go-with-jwt.it", envy.Get("GO_ENV", "development")),
 			Id:        u.ID,
 		},
